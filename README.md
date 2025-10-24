@@ -10,6 +10,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -18,23 +19,28 @@
             align-items: center;
             min-height: 100vh;
             background: #000000;
-            padding: 20px;
+            padding: 15px;
+            overflow: hidden;
+            touch-action: manipulation;
         }
         
         .calculator {
             background-color: #000000;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-            width: 380px;
+            width: 100%;
+            max-width: 400px;
             overflow: hidden;
-            padding: 25px;
+            padding: 20px;
             border: 1px solid #333;
+            position: relative;
+            z-index: 1;
         }
         
         .calculator-inner {
             background-color: #fff;
             border-radius: 16px;
-            padding: 20px;
+            padding: 18px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
@@ -42,40 +48,55 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #eaeaea;
         }
         
         .logo {
-            height: 40px;
+            height: 35px;
+            max-width: 100%;
         }
         
         .display {
             background-color: #f8f9fa;
             border-radius: 10px;
             padding: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             text-align: right;
             color: #333;
-            min-height: 100px;
+            min-height: 90px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
             border: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .display:hover {
+            background-color: #f0f3f5;
+        }
+        
+        .display:active {
+            transform: scale(0.98);
         }
         
         .previous-operand {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #666;
-            min-height: 1.2rem;
+            min-height: 1.1rem;
             word-wrap: break-word;
             word-break: break-all;
         }
         
         .current-operand {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 500;
             word-wrap: break-word;
             word-break: break-all;
@@ -86,13 +107,13 @@
         .buttons-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            grid-gap: 10px;
+            grid-gap: 8px;
         }
         
         button {
             border: none;
             border-radius: 8px;
-            padding: 14px 0;
+            padding: 16px 0;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.1s ease;
@@ -100,16 +121,18 @@
             background-color: #f0f0f0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             font-weight: 500;
+            touch-action: manipulation;
+            min-height: 50px;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         button:hover {
             background-color: #e0e0e0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
         button:active {
-            transform: translateY(0);
+            transform: scale(0.95);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
@@ -133,7 +156,8 @@
         
         .scientific {
             background-color: #f8f9fa;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            padding: 14px 0;
         }
         
         .scientific:hover {
@@ -159,15 +183,19 @@
             font-size: 0.9rem;
             margin-top: 15px;
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             transition: all 0.3s ease;
             border: none;
+            min-height: 44px;
         }
         
         .mode-toggle:hover {
             background-color: #555;
-            transform: translateY(-2px);
+        }
+        
+        .mode-toggle:active {
+            transform: scale(0.98);
         }
         
         .footer {
@@ -175,7 +203,7 @@
             margin-top: 15px;
             padding-top: 10px;
             color: #fff;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border-top: 1px solid #333;
         }
         
@@ -183,24 +211,104 @@
             color: #dc3545;
         }
         
+        /* Firework particles */
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Mobile-specific optimizations */
         @media (max-width: 480px) {
             .calculator {
-                width: 100%;
                 padding: 15px;
+                border-radius: 18px;
             }
             
             .calculator-inner {
                 padding: 15px;
+                border-radius: 14px;
+            }
+            
+            .display {
+                padding: 12px;
+                min-height: 80px;
+                margin-bottom: 15px;
+            }
+            
+            .current-operand {
+                font-size: 1.6rem;
+            }
+            
+            .previous-operand {
+                font-size: 0.8rem;
+            }
+            
+            button {
+                padding: 14px 0;
+                font-size: 0.9rem;
+                min-height: 45px;
+            }
+            
+            .scientific {
+                font-size: 0.75rem;
+                padding: 12px 0;
+            }
+            
+            .buttons-grid {
+                grid-gap: 6px;
+            }
+            
+            .logo {
+                height: 30px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .calculator {
+                padding: 12px;
+            }
+            
+            .calculator-inner {
+                padding: 12px;
+            }
+            
+            .display {
+                padding: 10px;
+                min-height: 70px;
+            }
+            
+            .current-operand {
+                font-size: 1.4rem;
             }
             
             button {
                 padding: 12px 0;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
+                min-height: 40px;
             }
             
-            .current-operand {
-                font-size: 1.7rem;
+            .scientific {
+                font-size: 0.7rem;
+                padding: 10px 0;
             }
+            
+            .buttons-grid {
+                grid-gap: 5px;
+            }
+        }
+        
+        /* Prevent text selection on buttons */
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
@@ -211,68 +319,68 @@
                 <img src="https://i.ibb.co/dsTTy0dd/image.png" alt="Calculator Logo" class="logo">
             </div>
             
-            <div class="display">
+            <div class="display" id="display">
                 <div class="previous-operand"></div>
                 <div class="current-operand">0</div>
             </div>
             
             <div class="buttons-grid" id="buttons-grid">
                 <!-- Row 1: Memory and clear functions -->
-                <button class="scientific" data-operation="mc">MC</button>
-                <button class="scientific" data-operation="mr">MR</button>
-                <button class="scientific" data-operation="m+">M+</button>
-                <button class="scientific" data-operation="m-">M-</button>
-                <button class="clear" data-action="clear">C</button>
+                <button class="scientific no-select" data-operation="mc">MC</button>
+                <button class="scientific no-select" data-operation="mr">MR</button>
+                <button class="scientific no-select" data-operation="m+">M+</button>
+                <button class="scientific no-select" data-operation="m-">M-</button>
+                <button class="clear no-select" data-action="clear">C</button>
                 
                 <!-- Row 2: Scientific functions -->
-                <button class="scientific" data-operation="sin">sin</button>
-                <button class="scientific" data-operation="cos">cos</button>
-                <button class="scientific" data-operation="tan">tan</button>
-                <button class="scientific" data-operation="π">π</button>
-                <button class="clear" data-action="clear-entry">CE</button>
+                <button class="scientific no-select" data-operation="sin">sin</button>
+                <button class="scientific no-select" data-operation="cos">cos</button>
+                <button class="scientific no-select" data-operation="tan">tan</button>
+                <button class="scientific no-select" data-operation="π">π</button>
+                <button class="clear no-select" data-action="clear-entry">CE</button>
                 
                 <!-- Row 3: Scientific functions -->
-                <button class="scientific" data-operation="log">log</button>
-                <button class="scientific" data-operation="ln">ln</button>
-                <button class="scientific" data-operation="x²">x²</button>
-                <button class="scientific" data-operation="√">√</button>
-                <button class="scientific" data-action="backspace">⌫</button>
+                <button class="scientific no-select" data-operation="log">log</button>
+                <button class="scientific no-select" data-operation="ln">ln</button>
+                <button class="scientific no-select" data-operation="x²">x²</button>
+                <button class="scientific no-select" data-operation="√">√</button>
+                <button class="scientific no-select" data-action="backspace">⌫</button>
                 
                 <!-- Row 4: Numbers and operations -->
-                <button class="scientific" data-operation="x^y">x^y</button>
-                <button class="scientific" data-operation="10^x">10^x</button>
-                <button class="number" data-number="7">7</button>
-                <button class="number" data-number="8">8</button>
-                <button class="number" data-number="9">9</button>
+                <button class="scientific no-select" data-operation="x^y">x^y</button>
+                <button class="scientific no-select" data-operation="10^x">10^x</button>
+                <button class="number no-select" data-number="7">7</button>
+                <button class="number no-select" data-number="8">8</button>
+                <button class="number no-select" data-number="9">9</button>
                 
                 <!-- Row 5: Numbers and operations -->
-                <button class="scientific" data-operation="1/x">1/x</button>
-                <button class="scientific" data-operation="%">%</button>
-                <button class="number" data-number="4">4</button>
-                <button class="number" data-number="5">5</button>
-                <button class="number" data-number="6">6</button>
+                <button class="scientific no-select" data-operation="1/x">1/x</button>
+                <button class="scientific no-select" data-operation="%">%</button>
+                <button class="number no-select" data-number="4">4</button>
+                <button class="number no-select" data-number="5">5</button>
+                <button class="number no-select" data-number="6">6</button>
                 
                 <!-- Row 6: Numbers and operations -->
-                <button class="scientific" data-operation="e">e</button>
-                <button class="scientific" data-operation="±">±</button>
-                <button class="number" data-number="1">1</button>
-                <button class="number" data-number="2">2</button>
-                <button class="number" data-number="3">3</button>
+                <button class="scientific no-select" data-operation="e">e</button>
+                <button class="scientific no-select" data-operation="±">±</button>
+                <button class="number no-select" data-number="1">1</button>
+                <button class="number no-select" data-number="2">2</button>
+                <button class="number no-select" data-number="3">3</button>
                 
                 <!-- Row 7: Numbers and operations -->
-                <button class="operation" data-operation="(">(</button>
-                <button class="operation" data-operation=")">)</button>
-                <button class="number zero" data-number="0">0</button>
-                <button class="number" data-number=".">.</button>
-                <button class="equals" data-action="calculate">=</button>
+                <button class="operation no-select" data-operation="(">(</button>
+                <button class="operation no-select" data-operation=")">)</button>
+                <button class="number zero no-select" data-number="0">0</button>
+                <button class="number no-select" data-number=".">.</button>
+                <button class="equals no-select" data-action="calculate">=</button>
                 
                 <!-- Row 8: Basic operations (right side) -->
-                <button class="operation" data-operation="÷">÷</button>
-                <button class="operation" data-operation="×">×</button>
-                <button class="operation" data-operation="-">-</button>
-                <button class="operation" data-operation="+">+</button>
+                <button class="operation no-select" data-operation="÷">÷</button>
+                <button class="operation no-select" data-operation="×">×</button>
+                <button class="operation no-select" data-operation="-">-</button>
+                <button class="operation no-select" data-operation="+">+</button>
             </div>
-            <button class="mode-toggle" id="mode-toggle">Switch to Basic Mode</button>
+            <button class="mode-toggle no-select" id="mode-toggle">Switch to Basic Mode</button>
         </div>
         <div class="footer">
             Made in 💖 By Armeen
@@ -517,15 +625,114 @@
             }
         }
         
+        // Mobile-optimized firework effect
+        function createFirework(event) {
+            // Prevent multiple rapid triggers on mobile
+            if (window.fireworkCooldown) return;
+            window.fireworkCooldown = true;
+            setTimeout(() => { window.fireworkCooldown = false; }, 300);
+            
+            const display = event.currentTarget;
+            const rect = display.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Create fewer particles on mobile for better performance
+            const particleCount = window.innerWidth < 480 ? 25 : 40;
+            
+            for (let i = 0; i < particleCount; i++) {
+                createParticle(centerX, centerY);
+            }
+            
+            // Add a subtle flash effect to the display
+            display.style.backgroundColor = '#ffeb3b';
+            setTimeout(() => {
+                display.style.backgroundColor = '#f8f9fa';
+            }, 150);
+        }
+        
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random colors for the particles
+            const colors = ['#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.backgroundColor = color;
+            
+            // Random size (smaller on mobile)
+            const size = Math.random() * 4 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random position around the click point
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 80 + 40;
+            const deltaX = Math.cos(angle) * distance;
+            const deltaY = Math.sin(angle) * distance;
+            
+            // Set initial position
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            
+            document.body.appendChild(particle);
+            
+            // Shorter animation on mobile
+            const duration = window.innerWidth < 480 ? 600 : 800;
+            
+            // Animate the particle
+            const animation = particle.animate([
+                { 
+                    transform: 'translate(0, 0) scale(1)',
+                    opacity: 1
+                },
+                { 
+                    transform: `translate(${deltaX}px, ${deltaY}px) scale(0)`,
+                    opacity: 0
+                }
+            ], {
+                duration: Math.random() * duration + 400,
+                easing: 'cubic-bezier(0, .9, .57, 1)'
+            });
+            
+            // Remove particle after animation completes
+            animation.onfinish = () => {
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            };
+        }
+        
         // Initialize calculator
         const previousOperandElement = document.querySelector('.previous-operand');
         const currentOperandElement = document.querySelector('.current-operand');
         const calculator = new Calculator(previousOperandElement, currentOperandElement);
         const buttonsGrid = document.getElementById('buttons-grid');
+        const display = document.getElementById('display');
+        
+        // Add touch event for mobile firework effect
+        display.addEventListener('click', createFirework);
+        display.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Prevent double-tap zoom
+            createFirework(e);
+        }, { passive: false });
         
         // Number buttons
         document.querySelectorAll('[data-number]').forEach(button => {
             button.addEventListener('click', () => {
+                calculator.appendNumber(button.innerText);
+                calculator.updateDisplay();
+            });
+            
+            // Add touch events for mobile
+            button.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            button.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.style.transform = '';
                 calculator.appendNumber(button.innerText);
                 calculator.updateDisplay();
             });
@@ -537,6 +744,19 @@
                 calculator.chooseOperation(button.innerText);
                 calculator.updateDisplay();
             });
+            
+            // Add touch events for mobile
+            button.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            button.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.style.transform = '';
+                calculator.chooseOperation(button.innerText);
+                calculator.updateDisplay();
+            });
         });
         
         // Scientific operation buttons
@@ -545,11 +765,48 @@
                 calculator.scientificOperation(button.getAttribute('data-operation'));
                 calculator.updateDisplay();
             });
+            
+            // Add touch events for mobile
+            button.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            button.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.style.transform = '';
+                calculator.scientificOperation(button.getAttribute('data-operation'));
+                calculator.updateDisplay();
+            });
         });
         
         // Action buttons
         document.querySelectorAll('[data-action]').forEach(button => {
             button.addEventListener('click', () => {
+                const action = button.getAttribute('data-action');
+                
+                if (action === 'calculate') {
+                    calculator.calculate();
+                } else if (action === 'clear') {
+                    calculator.clear();
+                } else if (action === 'clear-entry') {
+                    calculator.clearEntry();
+                } else if (action === 'backspace') {
+                    calculator.delete();
+                }
+                
+                calculator.updateDisplay();
+            });
+            
+            // Add touch events for mobile
+            button.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            button.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.style.transform = '';
                 const action = button.getAttribute('data-action');
                 
                 if (action === 'calculate') {
@@ -587,7 +844,50 @@
             }
         });
         
-        // Keyboard support
+        // Add touch events for mode toggle
+        modeToggle.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        modeToggle.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            this.style.transform = '';
+            const isScientific = calculator.toggleMode();
+            const scientificButtons = document.querySelectorAll('.scientific');
+            
+            if (isScientific) {
+                modeToggle.innerText = 'Switch to Basic Mode';
+                buttonsGrid.classList.remove('basic-grid');
+                scientificButtons.forEach(button => {
+                    button.style.display = 'block';
+                });
+            } else {
+                modeToggle.innerText = 'Switch to Scientific Mode';
+                buttonsGrid.classList.add('basic-grid');
+                scientificButtons.forEach(button => {
+                    button.style.display = 'none';
+                });
+            }
+        });
+        
+        // Prevent zoom on double tap
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Keyboard support (for devices with physical keyboards)
         document.addEventListener('keydown', (event) => {
             if (event.key >= '0' && event.key <= '9') {
                 calculator.appendNumber(event.key);
